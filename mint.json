@@ -40,36 +40,44 @@
   ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Getting Started",
       "pages": [
         "introduction",
-        "quickstart",
-        "development"
+        "quickstart"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Integrations",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "integrations/overview",
+        "integrations/langchain",
+        "integrations/flowise",
+        "integrations/custom-api"
       ]
     },
     {
-      "group": "API Documentation",
+      "group": "Monetization",
       "pages": [
-        "api-reference/introduction"
+        "monetization/setup",
+        "monetization/pricing-models",
+        "monetization/stripe-connect",
+        "monetization/payouts"
       ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "Platform Features",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "features/marketplace",
+        "features/analytics",
+        "features/sharing"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "api-reference/introduction",
+        "api-reference/authentication",
+        "api-reference/endpoints"
       ]
     }
   ],
