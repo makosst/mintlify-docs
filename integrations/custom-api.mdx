@@ -1,0 +1,95 @@
+---
+title: 'Custom API'
+description: 'Connect any AI agent via API'
+---
+
+## Overview
+
+The Custom API integration allows you to connect any AI agent that follows our API specifications. This enables you to integrate your own AI solutions or third-party services with Pactory.
+
+## Prerequisites
+
+- An API endpoint that accepts POST requests
+- API authentication credentials (if required)
+- API response format matching our specifications
+
+## API Specifications
+
+### Request Format
+
+<CodeGroup>
+
+```json Headers
+{
+  "Content-Type": "application/json",
+  "api-key": "your-api-key"
+}
+```
+
+```json Body
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "System prompt defining the agent's behavior"
+    },
+    {
+      "role": "user",
+      "content": "User message"
+    },
+    {
+      "role": "assistant",
+      "content": "Previous assistant response"
+    },
+    {
+      "role": "user",
+      "content": "Current user message"
+    }
+  ]
+}
+```
+
+</CodeGroup>
+
+### Response Format
+
+```json
+{
+  "choices": [{
+    "message": {
+      "content": "Agent's response text"
+    }
+  }],
+  "usage": {
+    "prompt_tokens": 123,    // Optional
+    "completion_tokens": 456  // Optional
+  }
+}
+```
+
+<Note>
+If token counts are not provided in the response, we will calculate them using the [GPT-4 tiktoken encoding](https://github.com/openai/tiktoken). This ensures accurate billing even when the API doesn't provide token counts.
+</Note>
+
+## Integration Steps
+
+<Steps>
+  <Step title="Access Integration">
+    From your Pactory dashboard, go to "Add New Agent" and select "Custom API"
+  </Step>
+  <Step title="Configure Basic Settings">
+    Fill in the [standard agent configuration fields](/features/agent-creation) (name, description, etc.)
+  </Step>
+  <Step title="Configure Integration">
+    Enter your API configuration:
+    - API endpoint URL (required)
+    - API key (required)
+  </Step>
+  <Step title="Test Connection">
+    Send a test message to verify the integration is working properly
+  </Step>
+</Steps>
+
+<Note>
+Your API endpoint must handle the request format specified above and return responses in the expected format. Token usage tracking is optional but recommended for accurate billing.
+</Note>

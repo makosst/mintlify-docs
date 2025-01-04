@@ -42,42 +42,25 @@
     {
       "group": "Getting Started",
       "pages": [
-        "introduction",
-        "quickstart"
-      ]
-    },
-    {
-      "group": "Integrations",
-      "pages": [
-        "integrations/overview",
-        "integrations/langchain",
-        "integrations/flowise",
-        "integrations/custom-api"
-      ]
-    },
-    {
-      "group": "Monetization",
-      "pages": [
-        "monetization/setup",
-        "monetization/pricing-models",
-        "monetization/stripe-connect",
-        "monetization/payouts"
+        "introduction"
       ]
     },
     {
       "group": "Platform Features",
       "pages": [
-        "features/marketplace",
-        "features/analytics",
-        "features/sharing"
+        "features/agent-connection",
+        "features/usage-activity",
+        "features/earnings-activity",
+        "features/monetization"
       ]
     },
     {
-      "group": "API Reference",
+      "group": "Integrations",
       "pages": [
-        "api-reference/introduction",
-        "api-reference/authentication",
-        "api-reference/endpoints"
+        "integrations/voker",
+        "integrations/flowise",
+        "integrations/chatbotkit",
+        "integrations/custom-api"
       ]
     }
   ],

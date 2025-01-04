@@ -1,0 +1,39 @@
+---
+title: 'ChatBotKit'
+description: 'Connect your [ChatBotKit](https://chatbotkit.com) bots to Pactory'
+---
+
+## Overview
+
+ChatBotKit is a no-code AI builder that allows you to create and deploy conversational AI agents. This integration enables you to connect your ChatBotKit bots to Pactory and monetize them.
+
+## Prerequisites
+
+- A ChatBotKit bot deployed and running
+- Your ChatBotKit API endpoint URL
+- Your ChatBotKit API key
+
+## Integration Steps
+
+<Steps>
+  <Step title="Access Integration">
+    From your Pactory dashboard, go to "Add New Agent" and select "ChatBotKit"
+  </Step>
+  <Step title="Configure Basic Settings">
+    Fill in the [standard agent configuration fields](/features/agent-creation) (name, description, etc.)
+  </Step>
+  <Step title="Configure Integration">
+    Enter your ChatBotKit-specific configuration:
+    - API endpoint URL (required)
+    - API key (required)
+
+    Note that the System Prompt field is not available as it's managed in ChatBotKit platform
+  </Step>
+  <Step title="Test Connection">
+    Send a test message to verify the integration is working properly
+  </Step>
+</Steps>
+
+## API Configuration
+
+Your ChatBotKit bot needs to be accessible via API. Make sure your endpoint follows this format:

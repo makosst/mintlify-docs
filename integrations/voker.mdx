@@ -1,0 +1,43 @@
+---
+title: 'Voker'
+description: 'Connect your [Voker](https://voker.ai){target="_blank"} no-code AI tools to Pactory'
+---
+
+## Overview
+
+Voker is a no-code AI builder platform that allows product teams to create and deploy AI features without coding. This integration enables you to connect your Voker-built AI tools to Pactory and monetize them.
+
+## Prerequisites
+
+- A Voker account with a prediction-type AI tool built and deployed
+- Your Voker API endpoint URL
+- Your Voker API key
+
+## Integration Steps
+
+<Steps>
+  <Step title="Access Integration">
+    From your Pactory dashboard, go to "Add New Agent" and select "Voker". Note that Voker integration is only available for prediction-type agents.
+  </Step>
+  <Step title="Configure Basic Settings">
+    Fill in the [standard agent configuration fields](/features/agent-creation) (name, description, etc.)
+  </Step>
+  <Step title="Configure Integration">
+    Enter your Voker-specific configuration:
+    - API endpoint URL (required)
+    - API key (required)
+
+    Note that:
+    - Only text input via the "question" field is supported
+    - Only text output is supported (no structured output)
+    - Prediction mode is automatically selected
+    - System Prompt field is not available as it's managed in Voker platform
+  </Step>
+  <Step title="Test Connection">
+    Send a test message to verify the integration is working properly
+  </Step>
+</Steps>
+
+## API Configuration
+
+Your Voker AI tool needs to be properly configured for API access. The platform handles all the API calls automatically. Please ensure your Voker agent is configured as a prediction-type model that accepts a text input ("question" field) and returns a text output.

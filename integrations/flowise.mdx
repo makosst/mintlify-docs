@@ -1,0 +1,39 @@
+---
+title: 'Flowise'
+description: 'Connect your [Flowise](https://flowiseai.com) chatbots to Pactory'
+---
+
+## Overview
+
+Flowise is a powerful tool for building AI chatbots using a drag-and-drop interface. This integration allows you to connect your Flowise chatbots to Pactory and monetize them.
+
+## Prerequisites
+
+- A Flowise chatbot deployed and running
+- Your Flowise API endpoint URL
+- Your Flowise API key
+
+## Integration Steps
+
+<Steps>
+  <Step title="Access Integration">
+    From your Pactory dashboard, go to "Add New Agent" and select "Flowise"
+  </Step>
+  <Step title="Configure Basic Settings">
+    Fill in the [standard agent configuration fields](/features/agent-creation) (name, description, etc.)
+  </Step>
+  <Step title="Configure Integration">
+    Enter your Flowise-specific configuration:
+    - API endpoint URL (required)
+    - API key (required)
+
+    Note that the System Prompt field is not available as it's managed in Flowise platform
+  </Step>
+  <Step title="Test Connection">
+    Send a test message to verify the integration is working properly
+  </Step>
+</Steps>
+
+## API Configuration
+
+Your Flowise chatbot needs to be accessible via API. Make sure your endpoint follows this format:

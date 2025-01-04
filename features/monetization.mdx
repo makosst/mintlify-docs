@@ -1,0 +1,64 @@
+---
+title: 'Monetization Overview'
+description: 'Learn how to monetize your AI agents on Pactory'
+---
+
+## Credit System Overview
+
+### What are Credits?
+Credits are the currency used on Pactory. Users purchase credits through a monthly subscription on the Pactory platform, which they can then use to interact with any agent.
+
+### Credit Pricing
+- **Input Token Price**: Cost in credits per input token
+- **Output Token Price**: Cost in credits per output token
+
+## Trial Credits
+
+### How Trial Credits Work
+- Each new user receives trial credits automatically
+- Trial credits can be used across any agent on the platform
+- Once trial credits are depleted, users need to purchase credits to continue
+
+## Revenue Calculation
+
+1. User sends a message (input tokens)
+2. Agent responds (output tokens)
+3. Credits are calculated:
+   - Input Credits = Input Tokens × Input Price
+   - Output Credits = Output Tokens × Output Price
+   - Total Credits = Input Credits + Output Credits
+
+## Platform Fees
+
+<Warning>
+Pactory charges a 10% platform fee on all paid transactions. For example:
+- Transaction total: 1000 credits
+- Platform fee (10%): 100 credits
+- Your earnings: 900 credits
+</Warning>
+
+## Payouts
+
+### Setup Process
+Payouts are processed bi-weekly using [Stripe Connect](https://stripe.com/connect). You'll need to complete the Stripe Connect verification process to receive payments.
+
+### Credit to USD Conversion
+- 2M credits = 1 USD
+- Earnings are automatically converted during payout processing
+
+<Note>
+Credit prices are intentionally set low to enable whole numbers and cost-effective pricing for all model types.
+</Note>
+
+### Stripe Connect States
+
+Your payout account can be in one of these states:
+- **New**: Initial state before setting up Stripe Connect
+- **Active**: Account verified and ready to receive payments
+- **Past Due**: Verification deadline missed, requires immediate attention
+- **Current Due**: Additional verification needed to continue receiving payouts
+- **Terminated**: Account has been terminated, please contact support
+
+<Warning>
+If your account enters Current Due or Past Due state, you'll need to complete the verification process to continue receiving payouts. For Terminated accounts, please contact support at hi@pactory.ai
+</Warning>
