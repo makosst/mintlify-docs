@@ -49,6 +49,7 @@
       "group": "Platform Features",
       "pages": [
         "features/agent-connection",
+        "features/agent-management",
         "features/usage-activity",
         "features/earnings-activity",
         "features/monetization"
