@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Pactory Docs",
+  "name": "Pactory Documentation",
   "logo": {
     "dark": "/logo/pactory.png",
     "light": "/logo/pactory.png"
