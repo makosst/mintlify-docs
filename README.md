@@ -1,32 +1,25 @@
-# Mintlify Starter Kit
+# Pactory - AI Agent Marketplace
 
-Click on `Use this template` to copy the Mintlify starter kit. The starter kit contains examples including
+Pactory is a platform that allows you to monetize your AI agents. Whether built using no-code tools or custom solutions, Pactory provides the infrastructure to connect, monetize, and share your agents with the world.
 
-- Guide pages
-- Navigation
-- Customizations
-- API Reference pages
-- Use of popular components
+## How It Works
 
-### Development
+1. **Create an Account**: Sign up to access the platform.
+2. **Connect Your Agent**: Use our integrations to connect your AI agent.
+3. **Share and Earn**: Share your agent’s link and earn credits based on usage.
+4. **Set Up Payments**: Connect your Stripe account for payouts.
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the documentation changes locally. To install, use the following command
+## Core Features
+- **Easy Connection**: Connect agents from popular platforms with just a few clicks.
+- **Monetization**: Set pricing and receive payouts via Stripe.
+- **Usage Tracking**: Monitor consumption and revenue from your agents.
 
-```
-npm i -g mintlify
-```
+## Supported Integrations
+- **Voker**
+- **Flowise**
+- **ChatBotKit**
+- **Custom API**
 
-Run the following command at the root of your documentation (where mint.json is)
+## Getting Started
 
-```
-mintlify dev
-```
-
-### Publishing Changes
-
-Install our Github App to auto propagate changes from your repo to your deployment. Changes will be deployed to production automatically after pushing to the default branch. Find the link to install on your dashboard. 
-
-#### Troubleshooting
-
-- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
-- Page loads as a 404 - Make sure you are running in a folder with `mint.json`
+Ready to monetize your AI agent? [Follow our guide to connect and monetize your first agent](https://docs.pactory.ai/introduction).
