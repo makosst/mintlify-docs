@@ -46,11 +46,16 @@
       ]
     },
     {
-      "group": "Platform Features",
+      "group": "Workspace",
+      "pages": [
+        "features/usage-activity"
+      ]
+    },
+    {
+      "group": "Developers Hub",
       "pages": [
         "features/agent-connection",
         "features/agent-management",
-        "features/usage-activity",
         "features/earnings-activity",
         "features/monetization"
       ]
