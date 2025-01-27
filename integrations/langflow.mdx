@@ -9,13 +9,501 @@ LangFlow is a powerful tool for building AI chatbots using a drag-and-drop inter
 
 ## Prerequisites
 
-- A LangFlow chatbot deployed and running
+- A LangFlow agent deployed and running
 - Your LangFlow API endpoint URL
 - Your LangFlow API key
 
 ## Integration Steps
 
 <Steps>
+  <Step title="LangFlow Agent Setup">
+    <Tabs>
+      <Tab title="Basic Setup">
+        For a basic setup, you need to create a custom LangFlow component for the highlighted input block on the screenshot, and paste in the following code.
+
+        <img className="rounded-lg" src="/images/integration-screenshots/langflow-setup-basic.png" alt="LangFlow Setup Instructions" />
+
+        <Accordion title="Code Block">
+          <CodeGroup>
+          ```python Pactory Input
+          import json
+          from langflow.base.io.text import TextComponent
+          from langflow.io import MultilineInput, Output
+          from langflow.schema.message import Message
+          from langflow.utils.constants import MESSAGE_SENDER_AI, MESSAGE_SENDER_USER
+          from langflow.field_typing import BaseChatMessageHistory
+          from langchain.memory import ChatMessageHistory
+
+
+          class ParseInputComponent(TextComponent):
+              display_name = "Parse Input"
+              description = "Parse JSON input containing userId, redirectUrl, and messages into separate outputs."
+              icon = "type"
+              name = "ParseInput"
+
+              inputs = [
+                  MultilineInput(
+                      name="input_value",
+                      display_name="JSON Input",
+                      info="JSON containing userId, redirectUrl, and messages array.",
+                  ),
+              ]
+              
+              outputs = [
+                  Output(display_name="User ID", name="user_id", method="get_user_id"),
+                  Output(display_name="Redirect URL", name="redirect_url", method="get_redirect_url"),
+                  Output(display_name="Chat History", name="chat_history", method="get_chat_history"),
+              ]
+
+              def parse_json(self):
+                  try:
+                      if not hasattr(self, '_parsed_data'):
+                          self._parsed_data = json.loads(self.input_value)
+                      return self._parsed_data
+                  except json.JSONDecodeError:
+                      self.status = "Invalid JSON input"
+                      return {"userId": "default", "redirectUrl": "", "messages": []}
+
+              def get_user_id(self) -> Message:
+                  data = self.parse_json()
+                  user_id = data.get("userId", "default")
+                  return Message(text=user_id)
+
+              def get_redirect_url(self) -> Message:
+                  data = self.parse_json()
+                  redirect_url = data.get("redirectUrl", "")
+                  return Message(text=redirect_url)
+
+              def get_chat_history(self) -> Message:
+                  data = self.parse_json()
+                  formatted_messages = []
+                  
+                  for msg in data.get("messages", []):
+                      text = msg.get("text", "")
+                      sender = msg.get("sender", "HUMAN")
+                      
+                      if sender.upper() in ["AI", MESSAGE_SENDER_AI]:
+                          formatted_messages.append(f"AI: {text}")
+                      else:
+                          formatted_messages.append(f"User: {text}")
+
+                  chat_history = "\n".join(formatted_messages)
+                  return Message(text=chat_history) 
+          ```
+          </CodeGroup>
+        </Accordion>
+      </Tab>
+
+      <Tab title="Advanced Setup">
+        For advanced setup, that allows for transfering of authentication links from Composio to user, you need to create a custom component for each of the highlighted input blocks on the screenshot, and paste in the following code.
+
+        <img className="rounded-lg" src="/images/integration-screenshots/langflow-setup.png" alt="LangFlow Setup Instructions" />
+
+        <Accordion title="Code Blocks">
+          <CodeGroup>
+          ```python Pactory Input
+          import json
+          from langflow.base.io.text import TextComponent
+          from langflow.io import MultilineInput, Output
+          from langflow.schema.message import Message
+          from langflow.utils.constants import MESSAGE_SENDER_AI, MESSAGE_SENDER_USER
+          from langflow.field_typing import BaseChatMessageHistory
+          from langchain.memory import ChatMessageHistory
+
+
+          class ParseInputComponent(TextComponent):
+              display_name = "Parse Input"
+              description = "Parse JSON input containing userId, redirectUrl, and messages into separate outputs."
+              icon = "type"
+              name = "ParseInput"
+
+              inputs = [
+                  MultilineInput(
+                      name="input_value",
+                      display_name="JSON Input",
+                      info="JSON containing userId, redirectUrl, and messages array.",
+                  ),
+              ]
+              
+              outputs = [
+                  Output(display_name="User ID", name="user_id", method="get_user_id"),
+                  Output(display_name="Redirect URL", name="redirect_url", method="get_redirect_url"),
+                  Output(display_name="Chat History", name="chat_history", method="get_chat_history"),
+              ]
+
+              def parse_json(self):
+                  try:
+                      if not hasattr(self, '_parsed_data'):
+                          self._parsed_data = json.loads(self.input_value)
+                      return self._parsed_data
+                  except json.JSONDecodeError:
+                      self.status = "Invalid JSON input"
+                      return {"userId": "default", "redirectUrl": "", "messages": []}
+
+              def get_user_id(self) -> Message:
+                  data = self.parse_json()
+                  user_id = data.get("userId", "default")
+                  return Message(text=user_id)
+
+              def get_redirect_url(self) -> Message:
+                  data = self.parse_json()
+                  redirect_url = data.get("redirectUrl", "")
+                  return Message(text=redirect_url)
+
+              def get_chat_history(self) -> Message:
+                  data = self.parse_json()
+                  formatted_messages = []
+                  
+                  for msg in data.get("messages", []):
+                      text = msg.get("text", "")
+                      sender = msg.get("sender", "HUMAN")
+                      
+                      if sender.upper() in ["AI", MESSAGE_SENDER_AI]:
+                          formatted_messages.append(f"AI: {text}")
+                      else:
+                          formatted_messages.append(f"User: {text}")
+
+                  chat_history = "\n".join(formatted_messages)
+                  return Message(text=chat_history) 
+          ```
+
+          ```python Pactory Output
+          from typing import TYPE_CHECKING, cast
+
+          from pydantic import BaseModel, Field, create_model
+
+          from langflow.base.models.chat_result import get_chat_result
+          from langflow.custom import Component
+          from langflow.helpers.base_model import build_model_from_schema
+          from langflow.io import BoolInput, HandleInput, MessageTextInput, Output, StrInput, TableInput
+          from langflow.schema.data import Data
+          from langflow.schema.message import Message
+
+          if TYPE_CHECKING:
+              from langflow.field_typing.constants import LanguageModel
+
+
+          class StructuredOutputComponent(Component):
+              display_name = "Structured Output"
+              description = (
+                  "Transforms LLM responses into **structured data formats**. Ideal for extracting specific information "
+                  "or creating consistent outputs."
+              )
+              name = "StructuredOutput"
+              icon = "braces"
+
+              inputs = [
+                  HandleInput(
+                      name="llm",
+                      display_name="Language Model",
+                      info="The language model to use to generate the structured output.",
+                      input_types=["LanguageModel"],
+                      required=True,
+                  ),
+                  MessageTextInput(
+                      name="input_value",
+                      display_name="Input Message",
+                      info="The input message to the language model.",
+                      tool_mode=True,
+                      required=True,
+                  ),
+                  StrInput(
+                      name="schema_name",
+                      display_name="Schema Name",
+                      info="Provide a name for the output data schema.",
+                      advanced=True,
+                  ),
+                  TableInput(
+                      name="output_schema",
+                      display_name="Output Schema",
+                      info="Define the structure and data types for the model's output.",
+                      required=True,
+                      table_schema=[
+                          {
+                              "name": "name",
+                              "display_name": "Name",
+                              "type": "str",
+                              "description": "Specify the name of the output field.",
+                              "default": "field",
+                          },
+                          {
+                              "name": "description",
+                              "display_name": "Description",
+                              "type": "str",
+                              "description": "Describe the purpose of the output field.",
+                              "default": "description of field",
+                          },
+                          {
+                              "name": "type",
+                              "display_name": "Type",
+                              "type": "str",
+                              "description": (
+                                  "Indicate the data type of the output field (e.g., str, int, float, bool, list, dict)."
+                              ),
+                              "default": "text",
+                          },
+                          {
+                              "name": "multiple",
+                              "display_name": "Multiple",
+                              "type": "boolean",
+                              "description": "Set to True if this output field should be a list of the specified type.",
+                              "default": "False",
+                          },
+                      ],
+                      value=[{"name": "field", "description": "description of field", "type": "text", "multiple": "False"}],
+                  ),
+                  BoolInput(
+                      name="multiple",
+                      advanced=True,
+                      display_name="Generate Multiple",
+                      info="Set to True if the model should generate a list of outputs instead of a single output.",
+                  ),
+              ]
+
+              outputs = [
+                  Output(name="structured_output", display_name="Structured Output", method="build_structured_output"),
+              ]
+
+              def build_structured_output(self) -> Message:
+                  schema_name = self.schema_name or "OutputModel"
+
+                  if not hasattr(self.llm, "with_structured_output"):
+                      msg = "Language model does not support structured output."
+                      raise TypeError(msg)
+                  if not self.output_schema:
+                      msg = "Output schema cannot be empty"
+                      raise ValueError(msg)
+
+                  # Create a new schema that includes the original value and the structured fields
+                  output_model_ = build_model_from_schema(self.output_schema)
+                  combined_fields = {
+                      "value": (str, Field(description="Original input message")),
+                      **{field["name"]: (str if field["type"] == "text" else eval(field["type"]), Field(description=field["description"])) 
+                         for field in self.output_schema}
+                  }
+                  
+                  if self.multiple:
+                      output_model = create_model(
+                          schema_name,
+                          objects=(list[create_model(schema_name + "Item", **combined_fields)], 
+                                  Field(description=f"A list of {schema_name}."))
+                      )
+                  else:
+                      output_model = create_model(schema_name, **combined_fields)
+
+                  try:
+                      llm_with_structured_output = cast("LanguageModel", self.llm).with_structured_output(schema=output_model)  # type: ignore[valid-type, attr-defined]
+                  except NotImplementedError as exc:
+                      msg = f"{self.llm.__class__.__name__} does not support structured output."
+                      raise TypeError(msg) from exc
+
+                  config_dict = {
+                      "run_name": self.display_name,
+                      "project_name": self.get_project_name(),
+                      "callbacks": self.get_langchain_callbacks(),
+                  }
+                  
+                  # Include the original input value in the context
+                  context = {"value": self.input_value}
+                  output = get_chat_result(runnable=llm_with_structured_output, input_value=self.input_value, config=config_dict)
+                  
+                  if isinstance(output, BaseModel):
+                      output_dict = output.model_dump()
+                      if not self.multiple:
+                          output_dict["value"] = self.input_value
+                      else:
+                          for item in output_dict["objects"]:
+                              item["value"] = self.input_value
+                  else:
+                      msg = f"Output should be a Pydantic BaseModel, got {type(output)} ({output})"
+                      raise TypeError(msg)
+                  
+                  import json
+                  return Message(text=json.dumps(output_dict))
+          ```
+          ```python Composio Advanced
+          from collections.abc import Sequence
+from typing import Any
+
+from composio.client.collections import AppAuthScheme
+from composio.client.exceptions import NoItemsFound
+from composio_langchain import Action, App, ComposioToolSet
+from langchain_core.tools import Tool
+from loguru import logger
+from typing_extensions import override
+
+from langflow.base.langchain_utilities.model import LCToolComponent
+from langflow.inputs import DropdownInput, MessageTextInput, SecretStrInput, StrInput, MultiselectInput
+from langflow.io import Output
+
+
+class ComposioAdvancedComponent(LCToolComponent):
+    display_name: str = "Composio Advanced Tools"
+    description: str = "Use Composio Advanced toolset to run actions with your agent on behalf of a user"
+    name = "ComposioAdvanced"
+    icon = "Composio"
+    documentation: str = "https://docs.composio.dev"
+
+    inputs = [
+        MessageTextInput(name="entity_id", display_name="User Entity ID", value="default"),
+        MessageTextInput(name="redirect_url", display_name="Redirect URL", value="https://www.google.com"),
+        SecretStrInput(
+            name="api_key",
+            display_name="Composio API Key",
+            required=True,
+            refresh_button=True,
+            info="Refer to https://docs.composio.dev/introduction/foundations/howtos/get_api_key",
+        ),
+        DropdownInput(
+            name="app_names",
+            display_name="App Name",
+            required=True,
+            refresh_button=True,
+            options=list(App.__annotations__),
+            value="",
+            info="The app name to use",
+        ),
+        MultiselectInput(
+            name="action_names",
+            display_name="Actions to use",
+            required=True,
+            options=[],
+            value=[],
+            info="The actions to pass to agent to execute",
+        ),
+    ]
+
+    outputs = [
+        Output(name="tools", display_name="Tools", method="build_tool"),
+    ]
+
+    @override
+    def update_build_config(self, build_config: dict, field_value: Any, field_name: str | None = None) -> dict:
+        # Update the available apps options when API key is provided
+        if field_name == "api_key" and hasattr(self, "api_key") and self.api_key:
+            build_config["app_names"]["options"] = list(App.iter())
+            build_config["app_names"]["show"] = True
+            build_config["app_names"]["advanced"] = False
+            
+        # Update action names when app is selected
+        if field_name == "app_names" and hasattr(self, "app_names") and self.app_names:
+            all_action_names = [str(action).replace("Action.", "") for action in Action.all()]
+            filtered_action_names = [
+                action_name for action_name in all_action_names
+                if action_name.lower().startswith(self.app_names.lower() + "_")
+            ]
+            
+            build_config["action_names"]["options"] = filtered_action_names
+            # Ensure value is always a list
+            build_config["action_names"]["value"] = []  # Start with empty list
+            if filtered_action_names:  # Add first action if available
+                build_config["action_names"]["value"] = [filtered_action_names[0]]
+            build_config["action_names"]["show"] = True
+            build_config["action_names"]["advanced"] = False
+
+        return build_config
+
+    def build_tool(self) -> Sequence[Tool]:
+        toolset = self._build_wrapper()
+        if not self.action_names:
+            return []
+        
+        app_name = self.app_names.lower()
+        
+        def create_auth_check_tool(app_name: str, action_name: str, toolset: ComposioToolSet):
+            def check_auth(*args, **kwargs):
+                try:
+                    entity = toolset.client.get_entity(id=self.entity_id)
+                    entity.get_connection(app=app_name)
+                    return f"Authentication successful for {app_name} - you can proceed with {action_name}"
+                except NoItemsFound:
+                    auth_scheme = toolset.get_auth_scheme_for_app(app=app_name)
+                    if auth_scheme.auth_mode == "OAUTH2":
+                        auth_url = entity.initiate_connection(
+                            app_name=app_name,
+                            use_composio_auth=True,
+                            force_new_integration=False,
+                            redirect_url=self.redirect_url
+                        ).redirectUrl
+                        return f"Authentication required. Please authenticate using this URL: {auth_url}"
+                    return f"Please set up authentication for {app_name} in the component settings"
+            
+            return Tool(
+                name=f"check_auth_{app_name}_{action_name}",
+                description=f"Check if authentication is valid for {action_name}. Use this before attempting the action.",
+                func=check_auth
+            )
+
+        def execute_with_auth_check(action_func, entity_id, app_name, toolset):
+            def wrapped(*args, **kwargs):
+                try:
+                    entity = toolset.client.get_entity(id=entity_id)
+                    entity.get_connection(app=app_name)
+                    return action_func(*args, **kwargs)
+                except NoItemsFound:
+                    return f"Authentication is required. Please use the check_auth tool first."
+            return wrapped
+
+        try:
+            # Convert action names to enums
+            action_enums = []
+            all_tools = []
+            
+            for action in self.action_names:
+                action_str = action.strip()
+                if action_str:
+                    action_enums.append(getattr(Action, action_str))
+                    # Create auth check tool for this action
+                    auth_tool = create_auth_check_tool(app_name, action_str, toolset)
+                    all_tools.append(auth_tool)
+            
+            if not action_enums:
+                return []
+
+            # Get the base tools
+            action_tools = toolset.get_tools(
+                actions=action_enums,
+                entity_id=self.entity_id
+            )
+
+            # Wrap each tool's function with auth check
+            for tool in action_tools:
+                original_func = tool.func
+                tool.func = execute_with_auth_check(
+                    original_func,
+                    self.entity_id,
+                    app_name,
+                    toolset
+                )
+                all_tools.append(tool)
+
+            return all_tools
+
+        except Exception as e:
+            logger.error(f"Error building tools: {e}")
+            return []
+
+    def _build_wrapper(self) -> ComposioToolSet:
+        """Build the Composio toolset wrapper."""
+        try:
+            if not self.api_key:
+                msg = "Composio API Key is required"
+                raise ValueError(msg)
+            return ComposioToolSet(
+                api_key=self.api_key,
+                entity_id=self.entity_id
+            )
+        except ValueError as e:
+            logger.error(f"Error building Composio wrapper: {e}")
+            msg = "Please provide a valid Composio API Key in the component settings"
+            raise ValueError(msg) from e
+
+          ```
+          </CodeGroup>
+        </Accordion>
+      </Tab>
+    </Tabs>
+  </Step>
   <Step title="Access Integration">
     From your Pactory dashboard, go to "Add New Agent" and select "LangFlow"
   </Step>

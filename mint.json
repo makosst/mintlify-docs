@@ -63,9 +63,10 @@
     {
       "group": "Integrations",
       "pages": [
-        "integrations/voker",
         "integrations/flowise",
+        "integrations/langflow",
         "integrations/chatbotkit",
+        "integrations/voker",
         "integrations/custom-api"
       ]
     }
