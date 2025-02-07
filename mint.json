@@ -66,6 +66,7 @@
         "integrations/flowise",
         "integrations/langflow",
         "integrations/chatbotkit",
+        "integrations/beamlit",
         "integrations/voker",
         "integrations/custom-api"
       ]
