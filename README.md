@@ -20,6 +20,7 @@ Pactory is a platform that allows you to monetize your AI agents. Whether built 
 - **ChatBotKit**
 - **Beamlit**
 - **Relevance AI**
+- **n8n**
 - **Custom API**
 
 ## Getting Started

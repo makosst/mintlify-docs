@@ -68,6 +68,7 @@
         "integrations/chatbotkit",
         "integrations/beamlit",
         "integrations/relevance",
+        "integrations/n8n",
         "integrations/voker",
         "integrations/custom-api"
       ]

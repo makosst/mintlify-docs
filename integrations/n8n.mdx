@@ -1,0 +1,102 @@
+---
+title: 'n8n'
+description: 'Connect your n8n workflows to Pactory'
+og:image: 'https://pactory.ai/pactory-n8n.png'
+---
+
+## Overview
+
+n8n is a tool for building no-code AI workflows. This integration allows you to connect your n8n workflows to Pactory, distribute and monetize them.
+
+## Prerequisites
+
+- n8n account
+- Pactory account
+
+## Setup Video Guide
+
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/BV0YhbJtWl8"
+  title="n8n Integration Guide"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen
+></iframe>
+
+## Step-by-Step Walkthrough
+
+<Steps>
+  <Step title="Create n8n workflow">
+    Create a n8n workflow
+  </Step>
+  <Step title="Set up the workflow">
+  <Tabs>
+      <Tab title="Step-by-step setup">
+      <Steps>
+  <Step title="Add a webhook node">
+    Add a webhook node to your workflow and copy the webhook URL
+  </Step>
+  <Step title="Set the response format">
+    Set the response format to "Using 'Respond to Webhook' Node"
+  </Step>
+  <Step title="Create Respond to Webhook node">
+    Create a Respond to Webhook node
+    <CodeGroup>
+            ```json Respond to Webhook Node Output
+            { "executionId": "{{ $execution.id }}" }
+            ```
+    </CodeGroup>
+  </Step>
+    <Step title="Use chatInput">
+    You can connect the webhook node to AI Agent or other nodes and use the following expression to use the user message.
+    <CodeGroup>
+            ```json chatInput
+           {{ $json.body.chatInput }}
+            ```
+    </CodeGroup>
+  </Step>
+  <Step title="Add an Execution Data node">
+    Add an Execution Data node to your workflow and connect it to the output of your workflow, add saved field and set the following properties:
+    <CodeGroup>
+            ```json Execution Data Node Output
+            Key: output
+            Value: {{ $json.output }} 
+            ```
+    </CodeGroup>
+  </Step>
+  </Steps>
+      </Tab>
+      <Tab title="Use pre-built workflow">
+        Use our pre-built workflow template and import it into your n8n instance:
+        
+        <Link href="https://github.com/PactoryAI/pactory-docs/raw/main/templates/n8nPactoryFlow.json">Download Workflow Template</Link>
+      </Tab>
+  </Tabs>
+  
+  </Step>
+  <Step title="Create n8n API key">
+    Create a n8n API key in the n8n profile settings, and save it
+  </Step> 
+  <Step title="Access Integration">
+    From your Pactory dashboard, go to "Add New Agent" and select "n8n"
+  </Step>
+  <Step title="Configure Basic Settings">
+    Fill in the [standard agent configuration fields](/features/agent-connection) (name, description, etc.)
+  </Step>
+  <Step title="Configure Integration">
+    Enter your n8n-specific configuration:
+    - n8n webhook URL
+    - n8n API key
+  </Step>
+  <Step title="Publish your agent">
+    Set privacy to "Public"
+  </Step>
+  <Step title="Test Connection">
+    Send a test message to verify the integration is working properly
+  </Step>
+  <Step title="Share your agent and get paid based on usage!">
+  </Step>
+</Steps>
+
